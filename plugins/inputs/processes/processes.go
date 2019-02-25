@@ -87,6 +87,7 @@ func getEmptyFields() map[string]interface{} {
 		fields["paging"] = int64(0)
 		fields["total_threads"] = int64(0)
 		fields["idle"] = int64(0)
+		fields["parked"] = int64(0)
 	}
 	return fields
 }
@@ -121,6 +122,8 @@ func (p *Processes) gatherFromPS(fields map[string]interface{}) error {
 			fields["sleeping"] = fields["sleeping"].(int64) + int64(1)
 		case 'I':
 			fields["idle"] = fields["idle"].(int64) + int64(1)
+		case 'P':
+			fields["parked"] = fields["parked"].(int64) + int64(1)
 		case '?':
 			fields["unknown"] = fields["unknown"].(int64) + int64(1)
 		default:
@@ -178,6 +181,8 @@ func (p *Processes) gatherFromProc(fields map[string]interface{}) error {
 			fields["paging"] = fields["paging"].(int64) + int64(1)
 		case 'I':
 			fields["idle"] = fields["idle"].(int64) + int64(1)
+		case 'P':
+			fields["parked"] = fields["parked"].(int64) + int64(1)
 		default:
 			log.Printf("I! processes: Unknown state [ %s ] in file %s",
 				string(stats[0][0]), filename)
